@@ -46,3 +46,11 @@ TextStyle get subitleStyle {
           fontWeight: FontWeight.w400,
           color: Get.isDarkMode ? Colors.grey[100] : Colors.grey[400]));
 }
+
+TextStyle get inputSubitleStyle {
+  return GoogleFonts.lato(
+      textStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Get.isDarkMode ? Colors.grey[100] : Colors.black));
+}

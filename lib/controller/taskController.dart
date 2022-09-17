@@ -8,7 +8,6 @@ class TaskController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    print("on ready called");
   }
 
   Future<int> addTask({Task? task}) async {
@@ -16,20 +15,17 @@ class TaskController extends GetxController {
   }
 
   void getTasks() async {
-    print("get Task method called");
     List<Map<String, dynamic>> tasks = await DBHelper.query();
     taskList.assignAll(tasks.map((data) => Task.fromJson(data)).toList());
     update();
   }
 
   void delete(Task task) {
-    print("Delete method called");
     DBHelper.delete(task);
     getTasks();
   }
 
   void markAsCompleted(int id) async {
-    print("Delete method function tc called");
     await DBHelper.taskUpdate(id);
     getTasks();
   }

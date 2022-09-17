@@ -5,7 +5,7 @@ import 'package:todoapp/model/tasks.dart';
 class DBHelper {
   static Database? _database;
   static const int db_version = 1;
-  static final String _tableName = "taskTable";
+  static const String _tableName = "taskTable";
 
   static Future<void> initDb() async {
     if (_database != null) {
@@ -31,16 +31,10 @@ class DBHelper {
   }
 
   static Future<int> inserttoDB(Task? task) async {
-    if (kDebugMode) {
-      print('db insert function called');
-    }
     return await _database?.insert(_tableName, task!.toJson()) ?? 1;
   }
 
   static Future<List<Map<String, dynamic>>> query() async {
-    if (kDebugMode) {
-      print("query function called");
-    }
     return await _database!.query(_tableName);
   }
 
@@ -50,7 +44,6 @@ class DBHelper {
   }
 
   static Future<int> taskUpdate(int id) async {
-    print("task update called");
     return await _database!.rawUpdate(
         '''UPDATE taskTable SET isCompleted=? where id=?''', [1, id]);
   }

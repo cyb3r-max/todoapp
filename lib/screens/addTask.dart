@@ -62,12 +62,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 textEditingController: null,
                 widget: IconButton(
                   onPressed: () {
-                    print('$_taskStartTime');
-                    print("calender button");
                     _getDateFromUser();
                   },
                   icon: Icon(Icons.calendar_month_outlined),
-                  color: darkGrey,
+                  color: Colors.black,
                 ),
               ),
               Row(
@@ -80,7 +78,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       widget: IconButton(
                         onPressed: () {
                           _getTimeFromUser(true);
-                          print('$_taskStartTime');
+                          //print('$_taskStartTime');
                         },
                         icon: Icon(Icons.access_time_outlined),
                         color: darkGrey,
@@ -192,7 +190,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (taskTitleController.text.isNotEmpty &&
         taskNoteController.text.isNotEmpty) {
       _addTaskToDB();
-      print('$_addTaskToDB()');
+      //print('$_addTaskToDB()');
       Get.back();
     } else if (taskTitleController.text.isEmpty ||
         taskNoteController.text.isEmpty) {
@@ -215,7 +213,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             remind: _remindTime,
             repeat: _repeatTime,
             isCompleted: 0));
-    print("Insert row id $rowvalue");
+    //print("Insert row id $rowvalue");
   }
 
   _appBar(BuildContext context) {
@@ -250,7 +248,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (pickDate != null) {
       setState(() {
         _taskSelecteddateTime = pickDate;
-        print('$pickDate');
+        //print('$pickDate');
       });
     } else {
       print("Select date doesn't work");
@@ -264,7 +262,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         initialTime: TimeOfDay(
             hour: DateTime.now().hour, minute: DateTime.now().minute));
     String? formattedTime = pickedTime?.format(context);
-    print('$formattedTime');
+    //print('$formattedTime');
 
     if (pickedTime == null) {
       print('Time can\'t be null');

@@ -1,4 +1,5 @@
 import 'package:date_picker_timeline/date_picker_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
@@ -22,13 +23,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var notifyHelper;
+  var notifyHelper = NotificationHelper();
+  //var scheduleNotifyHelper=NotificationHelper().scheduledNotification(hour, minute, task)
   DateTime _selectedDate = DateTime.now();
   final TaskController _taskController = Get.put(TaskController());
   @override
   void initState() {
     super.initState();
-    notifyHelper = NotificationHelper();
     notifyHelper.initializeNotifaction();
     _taskController.getTasks();
   }
@@ -81,16 +82,21 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: _taskController.taskList.length,
             itemBuilder: (_, index) {
               Task task = _taskController.taskList[index];
-              print("task controller list view called");
-              if (task.repeat == 'Daily') {
-                DateTime dateTime =
-                    DateFormat.jm().parse(task.startDate.toString());
-                var notifyTime = DateFormat("HH:mm").format(dateTime);
-                print(notifyTime);
-                notifyHelper.scheduledNotification(
-                    int.parse(notifyTime.toString().split(":")[0]),
-                    int.parse(notifyTime.toString().split(":")[1]),
-                    task);
+              DateTime date = DateFormat.jm().parse(task.startDate.toString());
+              var notifyTime = DateFormat("HH:mm").format(date);
+              print(notifyTime);
+              notifyHelper.scheduledNotification(
+                  int.parse(notifyTime.toString().split(":")[0]),
+                  int.parse(notifyTime.toString().split(":")[1]),
+                  task);
+              if (task.repeat == "Daily") {
+                /* print("get called");
+                DateTime date = Intl.withLocale('en',
+                    () => DateFormat.jm().parse(task.startDate.toString()));
+                var notifyTime = DateFormat("HH:mm").format(date);
+                if (kDebugMode) {
+                  print(notifyTime);
+                }*/
                 return AnimationConfiguration.staggeredList(
                     position: index,
                     child: SlideAnimation(
@@ -99,6 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                if (kDebugMode) {
+                                  print("get called too fuck");
+                                }
                                 _bottomSheet(context, task);
                               },
                               child: TaskTile(task),
@@ -154,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           onDateChange: (date) => setState(() {
                 _selectedDate = date;
-                print('$_selectedDate');
+                //print('$_selectedDate');
               })));
   _appBar() {
     return AppBar(
@@ -171,15 +180,18 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: Icon(
           Get.isDarkMode ? Icons.sunny : Icons.nightlight_rounded,
-          size: 20,
+          size: 25,
           color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
       actions: [
-        Icon(
-          Icons.person_outline,
-          size: 20,
-          color: Get.isDarkMode ? Colors.white : Colors.black,
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Icon(
+            Icons.person,
+            size: 30,
+            color: Get.isDarkMode ? Colors.white : Colors.black,
+          ),
         )
       ],
     );
@@ -240,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   btnlabel: 'Task Completed',
                   onTap: () {
                     _taskController.markAsCompleted(task.id!);
-                    print("mark as completed callded");
+                    // print("mark as completed callded");
                     Get.back();
                   },
                   color: primaryColor,

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:todoapp/screens/noteDetails.dart';
 
 import '../model/tasks.dart';
 
@@ -27,25 +28,27 @@ class NotificationHelper {
     } else {
       print("Notification Done");
     }
-    Get.to(() => Container(
-          color: Colors.white,
-        ));
+    Get.to(() => NoteDetails(label: payload));
   }
 
   scheduledNotification(int hour, int minute, Task task) async {
     print("schedule notification called");
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
-        'xyz',
-        'fuck mother fucker',
+        task.title,
+        task.note,
         convertTime(hour, minute),
         //tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
-            android: AndroidNotificationDetails('channelId', 'channelName')),
+            android: AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+        )),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time);
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: "${task.title}|" + "${task.note}|");
   }
 
   tz.TZDateTime convertTime(int hour, int minutes) {
@@ -67,14 +70,19 @@ class NotificationHelper {
   displayNotification(
       {required String notification_title,
       required String notification_body}) async {
-    print("test notification");
     var androidPatformSpecificNotification = const AndroidNotificationDetails(
-        'channelId', 'channelName',
+        'your channel id', 'your channel name',
         importance: Importance.max, priority: Priority.high);
     var platformSpecificNotification =
         NotificationDetails(android: androidPatformSpecificNotification);
     await flutterLocalNotificationsPlugin.show(
         0, notification_title, notification_body, platformSpecificNotification,
         payload: 'DefaultSound');
+  }
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) async {
+    //showDialog(context: context, builder: builder)
+    Get.dialog(const Text('Welcome to flutter'));
   }
 }
